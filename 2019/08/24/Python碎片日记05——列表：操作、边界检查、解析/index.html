@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="列表">
+<meta name="keywords" content="Python,列表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python碎片日记05——列表：操作、边界检查、解析">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;24&#x2F;Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B005%E2%80%94%E2%80%94%E5%88%97%E8%A1%A8%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E3%80%81%E8%A7%A3%E6%9E%90&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="列表">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-31T08:58:32.800Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/08/24/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B005%E2%80%94%E2%80%94%E5%88%97%E8%A1%A8%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E3%80%81%E8%A7%A3%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python碎片日记05——列表：操作、边界检查、解析 | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B005%E2%80%94%E2%80%94%E5%88%97%E8%A1%A8%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E3%80%81%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python碎片日记05——列表：操作、边界检查、解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-24T00:00:00+08:00">2019-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 16:58:32" itemprop="dateModified" datetime="2019-10-31T16:58:32+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python碎片日记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><a id="more"></a>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>除序列的基本操作外，列表还有许多特殊操作，详见help()。<br>常见特殊操作有11个：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">L.append(<span class="string">'NI'</span>) <span class="comment"># 尾部插入，此语句无返回值</span></span><br><span class="line">L.pop(<span class="number">2</span>) <span class="comment"># 去除位置为2的元素，此语句返回被删除元素</span></span><br><span class="line">L.remove(<span class="string">'NI'</span>) <span class="comment"># 去除内容为NI的元素</span></span><br><span class="line">L.insert(<span class="number">2</span>,<span class="string">'bb'</span>) <span class="comment">#</span></span><br><span class="line">L.extend(itr) <span class="comment">#尾部插入迭代器的内容,或者另一个列表用来扩展原列表</span></span><br><span class="line">L.sort() <span class="comment"># 升序排列,其括号中可以写关键字，如key=str.lower,reverse=True，使排列规则更具体</span></span><br><span class="line">		 <span class="comment"># 注意，在Python3中，跨类型的排序会抛出异常</span></span><br><span class="line">L.copy()</span><br><span class="line">L.count(<span class="string">'bb'</span>) <span class="comment">#计算某元素出现次数</span></span><br><span class="line">L.index(<span class="string">'bb'</span>,<span class="number">2</span>,<span class="number">4</span>) <span class="comment"># 返回在左闭右开区间[2,4)内某元素第一次出现的索引值</span></span><br><span class="line">L.clear()</span><br><span class="line">L.reverse() <span class="comment"># 翻转</span></span><br></pre></td></tr></table></figure>
+<p>其中，append、sort、reverse是在原处修改，无返回值（None对象）。<br>此外，列表除了像序列那样可以分片索引，还可以<strong>分片赋值</strong>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">b = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>] <span class="comment"># 注意，分片赋值都是赋列表</span></span><br><span class="line">b[<span class="number">1</span>]=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] <span class="comment">#[1, [4, 5, 6], 3, 4, 5, 6, 7]</span></span><br><span class="line">b[<span class="number">1</span>:<span class="number">3</span>]=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] <span class="comment">#[1, 4, 5, 6, 4, 5, 6, 7]相当于删除分片再进行插入，因此不需要等式左右元素数量一致</span></span><br><span class="line">b[<span class="number">2</span>:<span class="number">3</span>]=[] <span class="comment">#[1, 4, 6, 4, 5, 6, 7]相当于删除位置为2的元素</span></span><br><span class="line">b[<span class="number">2</span>:<span class="number">6</span>]=b[<span class="number">3</span>:<span class="number">6</span>]<span class="comment">#[1, 4, 4, 5, 6, 7]</span></span><br><span class="line">b[len(b):]=[<span class="number">5</span>] <span class="comment">#[1, 4, 4, 5, 6, 7, 5]相当于append</span></span><br><span class="line">b[:<span class="number">0</span>]=[<span class="number">0</span>]<span class="comment">#[0, 1, 4, 4, 5, 6, 7, 5]相当于前端插入</span></span><br><span class="line">b[<span class="number">2</span>:<span class="number">1</span>] = [<span class="string">'?'</span>] <span class="comment"># [1, 2, '?', 3, 4, 5, 6, 7] 当前值大于等于后值时赋值，相当于在前值位置插入；当如此索引时，会返回空列表</span></span><br></pre></td></tr></table></figure>
+<p>以及<strong>del删除语句</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>] </span><br><span class="line"><span class="keyword">del</span> b[<span class="number">0</span>]<span class="comment">#[2, 3, 4, 5, 6, 7]删除位置为0的元素</span></span><br><span class="line"><span class="keyword">del</span> b[<span class="number">1</span>:<span class="number">3</span>]<span class="comment">#[2, 5, 6, 7]删除对应区间的元素</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="边界检查"><a href="#边界检查" class="headerlink" title="边界检查"></a>边界检查</h2><p>尽管列表没有固定大小，但仍不允许引用不存在的元素。超出列表末尾之外的索引、对列表末尾范围之外赋值会导致错误。（对于字典则不受此限制）<br>但是，在分片过程中，超出索引不会报错，运行时会自动转换为边界索引号。当分片左值大于等于右值时，返回空列表。</p>
+<h2 id="列表解析list-comprehension-expression"><a href="#列表解析list-comprehension-expression" class="headerlink" title="列表解析list comprehension expression"></a>列表解析list comprehension expression</h2><p>用于处理类似矩阵结构的工具。也可用于字符串。（可以在任何序列类型中发挥作用，甚至一些不属于序列的类型，如集合、字典&lt;操作见日记07&gt;）<br>列表解析中for表达式可以有多个，即同时遍历多个列表。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">M = [[<span class="string">'J'</span>, <span class="string">'Q'</span>, <span class="string">'K'</span>],</span><br><span class="line">    [<span class="string">'2'</span>, <span class="string">'2'</span>, <span class="string">'2'</span>],</span><br><span class="line">    [<span class="string">'6'</span>, <span class="string">'A'</span>, <span class="string">'K'</span>]]</span><br><span class="line">col2 = [row[<span class="number">1</span>] <span class="keyword">for</span> row <span class="keyword">in</span> M] <span class="comment"># 获取第二列</span></span><br><span class="line">[row[<span class="number">1</span>] + <span class="number">1</span> <span class="keyword">for</span> row <span class="keyword">in</span> M] <span class="comment">#对第二列进行操作再输出</span></span><br><span class="line">[row[<span class="number">1</span>] <span class="keyword">for</span> row <span class="keyword">in</span> M <span class="keyword">if</span> row[<span class="number">1</span>] % <span class="number">2</span> == <span class="number">0</span>] <span class="comment">#对第二列进行筛选再输出</span></span><br><span class="line">diag [M[i][i] <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>] <span class="comment"># 取前三行三列的对角元素</span></span><br><span class="line">doubles = [c*<span class="number">2</span> <span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">'spam'</span>] <span class="comment">#返回['ss','pp','aa','mm']</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%88%97%E8%A1%A8/" rel="tag"># 列表</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/22/Leetcode%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B002%E2%80%94%E2%80%94%E5%88%9D%E7%BA%A7%E7%AE%97%E6%B3%95%E6%95%B0%E7%BB%84%E7%AF%87122%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA%20II/" rel="next" title="Leetcode刷题日记02——初级算法数组篇122买卖股票的最佳时机 II">
+                  <i class="fa fa-chevron-left"></i> Leetcode刷题日记02——初级算法数组篇122买卖股票的最佳时机 II
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/08/26/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E5%85%83%E7%BB%84%EF%BC%9A%E6%96%B9%E6%B3%95%EF%BC%9B%E6%96%87%E4%BB%B6%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E3%80%81pickle%E5%9D%97%E3%80%81struct%E5%9D%97%EF%BC%9B%E9%9B%86%E5%90%88set/" rel="prev" title="Python碎片日记07——元组：方法；文件：基本操作、pickle块、struct块；集合set">
+                  Python碎片日记07——元组：方法；文件：基本操作、pickle块、struct块；集合set <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#列表"><span class="nav-number">1.</span> <span class="nav-text">列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">1.1.</span> <span class="nav-text">操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#边界检查"><span class="nav-number">1.2.</span> <span class="nav-text">边界检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表解析list-comprehension-expression"><span class="nav-number">1.3.</span> <span class="nav-text">列表解析list comprehension expression</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">26k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>

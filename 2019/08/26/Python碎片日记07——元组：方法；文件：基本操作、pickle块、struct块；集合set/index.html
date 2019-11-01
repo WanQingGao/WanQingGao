@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="元组tuple">
+<meta name="keywords" content="Python,元组,集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python碎片日记07——元组：方法；文件：基本操作、pickle块、struct块；集合set">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;26&#x2F;Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E5%85%83%E7%BB%84%EF%BC%9A%E6%96%B9%E6%B3%95%EF%BC%9B%E6%96%87%E4%BB%B6%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E3%80%81pickle%E5%9D%97%E3%80%81struct%E5%9D%97%EF%BC%9B%E9%9B%86%E5%90%88set&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="元组tuple">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191008104526681.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190826104627853.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-10-31T09:14:51.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20191008104526681.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://yoursite.com/2019/08/26/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E5%85%83%E7%BB%84%EF%BC%9A%E6%96%B9%E6%B3%95%EF%BC%9B%E6%96%87%E4%BB%B6%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E3%80%81pickle%E5%9D%97%E3%80%81struct%E5%9D%97%EF%BC%9B%E9%9B%86%E5%90%88set/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python碎片日记07——元组：方法；文件：基本操作、pickle块、struct块；集合set | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/26/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E5%85%83%E7%BB%84%EF%BC%9A%E6%96%B9%E6%B3%95%EF%BC%9B%E6%96%87%E4%BB%B6%EF%BC%9A%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E3%80%81pickle%E5%9D%97%E3%80%81struct%E5%9D%97%EF%BC%9B%E9%9B%86%E5%90%88set/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python碎片日记07——元组：方法；文件：基本操作、pickle块、struct块；集合set
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-26 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-26T00:00:00+08:00">2019-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 17:14:51" itemprop="dateModified" datetime="2019-10-31T17:14:51+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python碎片日记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="元组tuple"><a href="#元组tuple" class="headerlink" title="元组tuple"></a>元组tuple</h1><a id="more"></a>
+<p>元组是序列，具有不可变性，支持<strong>任意类型、任意嵌套</strong>（包括可变的对象）。（Python手册上讲，元组是不可变的序列。）<strong>它的不可变性是它存在的最大意义。</strong></p>
+<h2 id="元组方法"><a href="#元组方法" class="headerlink" title="元组方法"></a>元组方法</h2><p>没有列表辣么多</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">T = (<span class="string">"a"</span>,) <span class="comment">#仅有一个元素的元组,如果没有逗号，则只是一个值而不是元组</span></span><br><span class="line">T = tuple(<span class="string">'ssddg'</span>)</span><br><span class="line">T = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">T = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> <span class="comment">#括号可以省略</span></span><br><span class="line">T.index(<span class="number">4</span>) <span class="comment"># 返回内容为4 的序号，此处返回3</span></span><br><span class="line">T.count(<span class="number">4</span>) <span class="comment"># 返回内容为4 的出现次数</span></span><br></pre></td></tr></table></figure>
+<h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><p><strong>没有特定的常量语法创建文件</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写文件</span></span><br><span class="line">f = open(<span class="string">'data.txt'</span>, <span class="string">'w'</span>) <span class="comment">#创建、打开一个文件，并以写的方式处理，括号里有第三个参数，当为‘0’时代表无缓存写入</span></span><br><span class="line">f.write(<span class="string">'Hello\n'</span>) <span class="comment"># 该语句会写入字符串（如果非字符串对象必须先进行转换），并返回写入字符数</span></span><br><span class="line">f.close() <span class="comment">#如果不写，Python会自动关闭文件，但写上是个好习惯</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#读文件</span></span><br><span class="line">f = open(<span class="string">'data.txt'</span>) <span class="comment">#默认为读</span></span><br><span class="line">text = f.read() <span class="comment"># 读出字符串，会含有转义符</span></span><br><span class="line">t1 = f.readline()<span class="comment">#读第一行</span></span><br><span class="line">t2 = f.readline() <span class="comment">#读第二行，当是空行是会返回一个含有新行符的字符串，当是文件底部时会返回一个空字符串</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">'data.txt'</span>): <span class="comment">#迭代器</span></span><br><span class="line">	print(line,end=<span class="string">''</span>)</span><br><span class="line"></span><br><span class="line">dir(f) <span class="comment"># 可以获取文件相关的更多操作</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20191008104526681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>如今读取一个文件的最佳方式是根本不读它，文件提供了一个迭代器（iterator)，它在for循环或其他环境中自动地一行一行地读取。</strong>——《Python学习手册》P110<br><img src="https://img-blog.csdnimg.cn/20190826104627853.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="《Python手册》P111"></p>
+<h2 id="pickle块"><a href="#pickle块" class="headerlink" title="pickle块"></a>pickle块</h2><p>当向文件中写入时，使用open-write方法只能写入字符串，对于其他类型，必须提前转化为字符串才能写入。对文件读出亦是只能读出字符串，然后手动转化为其他格式。pickle块是简化以上步骤的高级工具(该过程被称为对象序列化)。其使用方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写文件</span></span><br><span class="line">T=(<span class="string">"a"</span>,<span class="number">1</span>)</span><br><span class="line">M=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">Q=&#123;<span class="string">'A'</span>:<span class="number">1</span>, <span class="string">'B'</span>:<span class="number">2</span>, <span class="string">'C'</span>:<span class="number">3</span>&#125;</span><br><span class="line">F = open(<span class="string">'test.txt'</span>, <span class="string">'wb'</span>) <span class="comment"># 注意此处必须是二进制的，文件后缀也可以写作.pkl</span></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line">pickle.dump(T, F)</span><br><span class="line">pickle.dump(M, F)</span><br><span class="line">pickle.dump(Q, F)</span><br><span class="line">F.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读文件</span></span><br><span class="line">F = open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>) <span class="comment"># 注意此处必须是二进制的</span></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line">E1 = pickle.load(F) <span class="comment">#('a', 1)</span></span><br><span class="line">E2 = pickle.load(F) <span class="comment">#[1, 3, 4]</span></span><br><span class="line">E3 = pickle.load(F) <span class="comment">#&#123;'A': 1, 'B': 2, 'C': 3&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="struct块"><a href="#struct块" class="headerlink" title="struct块"></a>struct块</h2><p>一个可以将普通对象打包成二进制字符串的模块。</p>
+<h1 id="集合set"><a href="#集合set" class="headerlink" title="集合set"></a>集合set</h1><p>是<strong>唯一的、不可变的对象的无序</strong>集合（其整体是不可变的，包含对象也是不可变的，即不可包含列表、字典，此外包含对象也不可以是set（但可以用frozenset创建一个集合嵌入在其他set中），若想要复合类型对象可以选择元组），像一个没有值的字典的键。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">X = set(<span class="string">'spam'</span>) <span class="comment">#创建集合，此方法可以创建空集合</span></span><br><span class="line">Y = &#123;<span class="string">'h'</span>, <span class="string">'a'</span>, <span class="string">'m'</span>&#125; <span class="comment">#另一种创建集合的方法，仅用于Python3</span></span><br><span class="line">&#123;x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]&#125; <span class="comment">#另一种创建集合的方法，仅用于Python3</span></span><br><span class="line"><span class="comment">#使用&#123;&#125;不能创建空集合，创建的是空字典</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##集合支持一般的数学集合操作，而一般序列则不可以</span></span><br><span class="line">X, Y</span><br><span class="line">X &amp; Y</span><br><span class="line">X | Y <span class="comment">#并集</span></span><br><span class="line">X - Y</span><br><span class="line">X ^ Y <span class="comment"># XOR异或，即并集减交集</span></span><br><span class="line"><span class="string">'s'</span> <span class="keyword">in</span> X <span class="comment">#判断是否在集合中</span></span><br><span class="line">X &lt; Y <span class="comment">#判断X是否为Y的子集</span></span><br><span class="line">X &gt; Y</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>集合的常用方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#以下未写Z=的方法都是没有返回值的，但是X会改变（但这不代表集合是可变的）</span></span><br><span class="line"></span><br><span class="line">Z = X.intersection(Y) <span class="comment"># 等同于X&amp;Y</span></span><br><span class="line">Z = X.difference(Y) <span class="comment"># 等同于X - Y</span></span><br><span class="line">Z = X.union(Y) <span class="comment">#等同于X|Y</span></span><br><span class="line">Z = X.symmetric_difference(Y) <span class="comment">#等同于X^Y</span></span><br><span class="line">X.intersection_update(Y) <span class="comment">#等同于X = X&amp;Y</span></span><br><span class="line">X.difference_update(Y) <span class="comment">#等同于X = X - Y</span></span><br><span class="line">X.update(Y) <span class="comment">#等同于X = X - Y</span></span><br><span class="line">X.symmetric_difference_update(Y) <span class="comment">#等同于X = X^Y</span></span><br><span class="line"></span><br><span class="line">X.add(<span class="string">'spam'</span>) <span class="comment">#对set添加内容,注意一次只能加一个元素，此时spam不再分开而是作为整个字符串添加为X的一个元素</span></span><br><span class="line">Z = X.pop()<span class="comment">#随机去掉一个元素，Z是那个元素，X比之前少了Z</span></span><br><span class="line">X.remove(<span class="string">'f'</span>)<span class="comment">#除去某元素，如果该元素不在X中，则会报错</span></span><br><span class="line">X.discard(<span class="string">'f'</span>)<span class="comment"># 除去某元素，如果该元素不在X中，则不进行操作</span></span><br><span class="line">X.clear()</span><br><span class="line">Z = X.copy()</span><br><span class="line"></span><br><span class="line"><span class="comment">#以下方法均返回布尔值</span></span><br><span class="line">X.isdisjoint(Y)<span class="comment">#如果XY无交集则返回Ture</span></span><br><span class="line">X.issubset(Y) <span class="comment">#等同于X&lt;Y</span></span><br><span class="line">X.issuperset(Y)<span class="comment">#等同于X&gt;Y</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，集合的某些自带方法和用操作符操作的效果相似，但是二者并不是完完全全一样的：<strong>使用操作符对两个对象进行操作必须保证两个都是集合类型，否则会报错！而自带方法不要求括号中的对象一定是个集合，可以是列表、元组还有range()，这就是自带方法的优势所在！</strong></p>
+</li>
+<li><p>此外，集合支持len、for循环和列表解析，不支持索引和分片。<br>其列表解析：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> set(<span class="string">'abc'</span>) :print(item*<span class="number">3</span>)</span><br><span class="line">&#123;x ** <span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]&#125;<span class="comment">#实际上就是把列表解析结果再转换为集合&#123;1, 4, 9, 16&#125;</span></span><br><span class="line">&#123;x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">'spam'</span>&#125; <span class="comment"># &#123;'a', 'm', 'p', 's'&#125;</span></span><br><span class="line">&#123;c * <span class="number">4</span> <span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">'spam'</span>&#125; <span class="comment"># &#123;'aaaa', 'mmmm', 'pppp', 'ssss'&#125;</span></span><br><span class="line">&#123;c * <span class="number">4</span> <span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">'spamam'</span>&#125; <span class="comment"># &#123;'aaaa', 'mmmm', 'pppp', 'ssss'&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于集合的内容是不可重复的，因此它可以用来过滤其他collection的项：<strong>将可重复复合对象（如list）先转换为set，再转换回去，即可去重</strong>（但是顺序有可能被打乱）。</p>
+</li>
+<li><p>集合可以用来记录已经访问过的位置，便于遍历。</p>
+</li>
+<li><p>其交并补操作便于数据库查询结果的操作。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%85%83%E7%BB%84/" rel="tag"># 元组</a>
+              <a href="/tags/%E9%9B%86%E5%90%88/" rel="tag"># 集合</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/08/24/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B005%E2%80%94%E2%80%94%E5%88%97%E8%A1%A8%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E8%BE%B9%E7%95%8C%E6%A3%80%E6%9F%A5%E3%80%81%E8%A7%A3%E6%9E%90/" rel="next" title="Python碎片日记05——列表：操作、边界检查、解析">
+                  <i class="fa fa-chevron-left"></i> Python碎片日记05——列表：操作、边界检查、解析
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/08/26/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B006%E2%80%94%E2%80%94%E5%AD%97%E5%85%B8%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%E3%80%81%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E3%80%81%E5%AD%97%E5%85%B8%E8%A7%86%E5%9B%BE%E3%80%81%E5%88%A4%E6%96%ADkey%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E3%80%81key%E7%9A%84%E6%8E%92%E5%BA%8F%EF%BC%9B%E8%BF%AD%E4%BB%A3%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%AE%80%E8%BF%B0%EF%BC%89/" rel="prev" title="Python碎片日记06——字典：创建方法、常用方法、字典视图、判断key是否存在、key的排序；迭代协议（简述）">
+                  Python碎片日记06——字典：创建方法、常用方法、字典视图、判断key是否存在、key的排序；迭代协议（简述） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#元组tuple"><span class="nav-number">1.</span> <span class="nav-text">元组tuple</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#元组方法"><span class="nav-number">1.1.</span> <span class="nav-text">元组方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件"><span class="nav-number">2.</span> <span class="nav-text">文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pickle块"><span class="nav-number">2.1.</span> <span class="nav-text">pickle块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#struct块"><span class="nav-number">2.2.</span> <span class="nav-text">struct块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集合set"><span class="nav-number">3.</span> <span class="nav-text">集合set</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">26k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>

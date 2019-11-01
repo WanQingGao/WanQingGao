@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="代码转换1234ord(&amp;apos;s&amp;apos;)# 将单个字符转换为ASCII码chr(115)#将ASCII码转换为字符int(&amp;apos;1101&amp;apos;,2)#将字符串以2进制翻译成inteval(&amp;apos;[1,2,3]&amp;apos;) #内置函数，可以将字符串转化为任意类型对象（字符串表面看起来的类型，转义符会被自动忽略）">
+<meta name="keywords" content="Python,字符串">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python碎片日记14——字符串：代码转换、多次修改优化、格式化">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;09&#x2F;28&#x2F;Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B014%E2%80%94%E2%80%94%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%BD%AC%E6%8D%A2%E3%80%81%E5%A4%9A%E6%AC%A1%E4%BF%AE%E6%94%B9%E4%BC%98%E5%8C%96%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="代码转换1234ord(&amp;apos;s&amp;apos;)# 将单个字符转换为ASCII码chr(115)#将ASCII码转换为字符int(&amp;apos;1101&amp;apos;,2)#将字符串以2进制翻译成inteval(&amp;apos;[1,2,3]&amp;apos;) #内置函数，可以将字符串转化为任意类型对象（字符串表面看起来的类型，转义符会被自动忽略）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190905103242563.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190905103435397.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190905153242339.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190905154813506.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019092815180841.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190928150808511.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190928151548605.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190928155204343.png">
+<meta property="og:updated_time" content="2019-10-31T13:08:01.363Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190905103242563.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://yoursite.com/2019/09/28/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B014%E2%80%94%E2%80%94%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%BD%AC%E6%8D%A2%E3%80%81%E5%A4%9A%E6%AC%A1%E4%BF%AE%E6%94%B9%E4%BC%98%E5%8C%96%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python碎片日记14——字符串：代码转换、多次修改优化、格式化 | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/28/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B014%E2%80%94%E2%80%94%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%BD%AC%E6%8D%A2%E3%80%81%E5%A4%9A%E6%AC%A1%E4%BF%AE%E6%94%B9%E4%BC%98%E5%8C%96%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python碎片日记14——字符串：代码转换、多次修改优化、格式化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-28 00:00:00" itemprop="dateCreated datePublished" datetime="2019-09-28T00:00:00+08:00">2019-09-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 21:08:01" itemprop="dateModified" datetime="2019-10-31T21:08:01+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python碎片日记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a><h1 id="代码转换"><a href="#代码转换" class="headerlink" title="代码转换"></a>代码转换</h1><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ord(<span class="string">'s'</span>)<span class="comment"># 将单个字符转换为ASCII码</span></span><br><span class="line">chr(<span class="number">115</span>)<span class="comment">#将ASCII码转换为字符</span></span><br><span class="line">int(<span class="string">'1101'</span>,<span class="number">2</span>)<span class="comment">#将字符串以2进制翻译成int</span></span><br><span class="line">eval(<span class="string">'[1,2,3]'</span>) <span class="comment">#内置函数，可以将字符串转化为任意类型对象（字符串表面看起来的类型，转义符会被自动忽略）</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
+<h1 id="多次修改优化"><a href="#多次修改优化" class="headerlink" title="多次修改优化"></a>多次修改优化</h1><p>由于字符串时不可变的，每进行一次修改就要产生一个新对象，如果对一个超长字符串进行多次修改，为了优化性能，可以先将字符串转化为可变的类型，在修改后再转换回来。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">S = <span class="string">'sleeping'</span></span><br><span class="line">L = list(S)</span><br><span class="line">L[<span class="number">3</span>] = <span class="string">'M'</span></span><br><span class="line">S = <span class="string">''</span>.join(L)</span><br></pre></td></tr></table></figure>
+
+<h1 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h1><h2 id="1、-格式化表达式"><a href="#1、-格式化表达式" class="headerlink" title="1、%格式化表达式"></a>1、%格式化表达式</h2><p>使用%符号，左面是一个带有转换目标的需要格式化的字符串，右面是待插入的对象。当右侧值多于一个的时候，必须要放在一个元组中。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'%d %s %d you'</span>% (<span class="number">1</span>, <span class="string">'spam'</span>, <span class="number">4</span>) <span class="comment"># '1 spam 4 you'</span></span><br><span class="line"></span><br><span class="line">S = <span class="string">'sleeping'</span></span><br><span class="line">L = list(S)</span><br><span class="line">parts = L[<span class="number">0</span>], L[<span class="number">-1</span>], L[<span class="number">1</span>:<span class="number">-2</span>]</span><br><span class="line"><span class="string">'first=%s, last=%s, middle=%s'</span>%parts <span class="comment">#"first=s, last=g, middle=['l', 'e', 'e', 'p', 'i']"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"%s"</span>%((<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>),)<span class="comment">#如果想要输出元组，就把该元组放到另一个元组中</span></span><br></pre></td></tr></table></figure>
+<p>由于所有的对象都可以转换为字符串，所以除非特殊格式化，基本所有对象都可以使用%s来表示待转换目标。<br>格式化代码：<br><img src="https://img-blog.csdnimg.cn/20190905103242563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">通用结构：<br><img src="https://img-blog.csdnimg.cn/20190905103435397.png" alt="在这里插入图片描述">操作：</p>
+<ul>
+<li><p>放置一个字典的键</p>
+</li>
+<li><p>罗列出左对齐（-），正负号（+），和补零（0）的标志位</p>
+</li>
+<li><p>给出数字的整体长度和小数点后的位数（width和precision都可以编码为一个*，以指定他们应该从输入值的下一项中取值）</p>
+</li>
+<li><p>其他详见标准手册</p>
+<p>示例：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1234.5678</span></span><br><span class="line"><span class="string">'%-9.3f %+010.2f %*.*f'</span>%(x,x,<span class="number">11</span>,<span class="number">4</span>,x) <span class="comment">#'1234.568  +001234.57   1234.5678'</span></span><br><span class="line"><span class="comment">#当不用0补齐时，如果设置的总体长度超过数字长度，会默认在左边加适量空格，如果是左对齐，就在右边加空格</span></span><br></pre></td></tr></table></figure>
+<h3 id="基于字典的格式化"><a href="#基于字典的格式化" class="headerlink" title="基于字典的格式化"></a>基于字典的格式化</h3><p>在字符串中引用字典的键（即是通用结构中的(name)），在待转换对象中放入字典，即可实现转换。常用于HTML和XML的程序中。<br>示例：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">L = &#123;<span class="string">'n'</span>:<span class="number">123</span>, <span class="string">'x'</span>:<span class="string">'hhh'</span>&#125;</span><br><span class="line"><span class="string">"%(n)d %(x)s"</span>%L  <span class="comment">#'123 hhh'</span></span><br><span class="line"><span class="string">"%(n)d %(x)s"</span>%dict(n=<span class="number">444</span>, x=<span class="string">'234'</span>)  <span class="comment">#'444 234'</span></span><br></pre></td></tr></table></figure>
+<p>这种方法也常与内置函数vars配合（<strong>vars()返回一个字典</strong>，包含所有变量和对应的赋值，所有指的是程序的所有，包括自定义和自带的）：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="number">435</span></span><br><span class="line">n = [<span class="number">4</span>,<span class="number">6</span>]</span><br><span class="line">e = <span class="string">'ww'</span></span><br><span class="line"><span class="string">'%(s)d  %(n)s %(e)s'</span>%vars() <span class="comment">#'435  [4, 6] ww'</span></span><br></pre></td></tr></table></figure>
+<h2 id="2、format格式化调用方法"><a href="#2、format格式化调用方法" class="headerlink" title="2、format格式化调用方法"></a>2、format格式化调用方法</h2><p>使用花括号{}以及format将对象传递给字符串。<br><img src="https://img-blog.csdnimg.cn/20190905153242339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">在新版本的python中，{}中的数字可以省略，由程序自行匹配。<br>使用方括号指定字典键，使用点表示属性：<br><img src="https://img-blog.csdnimg.cn/20190905154813506.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">使用其他序列也可以（如列表），但是其索引只能正向偏移量，因此并不是十分通用。如果想要使用负的偏移或分片，或者任意表达式，必须在字符串之外运行：<br><img src="https://img-blog.csdnimg.cn/2019092815180841.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="中添加具体格式化"><a href="#中添加具体格式化" class="headerlink" title="{}中添加具体格式化"></a>{}中添加具体格式化</h3><p>形式如下：<br><img src="https://img-blog.csdnimg.cn/20190928150808511.png" alt="在这里插入图片描述">filename指定一个数字或者指代名，可以带[]索引，同上面介绍的{}里面的内容一样。<br>coversionflag可以是r、s、a，分别代表该值对repr、str或ascii的调用。<br>formatspec指定了字符串一些具体的格式，如字段宽度、对齐方式、补零、小数点精度等。具体组成如下：<br><img src="https://img-blog.csdnimg.cn/20190928151548605.png" alt="在这里插入图片描述">其中， align可以是&lt;、&gt;、=、^，分别代表左对齐、右对齐、一个标记字符后的补充、居中对齐。<br>除了普通的硬编码，类似于%格式化表达式中的*，formatspec也支持嵌套、只带有{}的格式化字符串，从参数列表中动态地获取值：<br><img src="https://img-blog.csdnimg.cn/20190928155204343.png" alt="在这里插入图片描述">此外，格式化方法中typecode除了格式化表达式支持的那些以外，还支持二进制类型编码‘b’。<br>具体详见库手册</p>
+<h2 id="与format比较"><a href="#与format比较" class="headerlink" title="%与format比较"></a>%与format比较</h2><ul>
+<li>通常情况下，格式化%表达式书写起来更加方便。</li>
+<li>但是格式化方法囊括格式化表达式的功能，此外，它还具有一些额外功能：二进制类型编码、千分位分组、支持直接的键和属性引用，并且可读性更好。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/09/04/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B013%E2%80%94%E2%80%94%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E5%8F%8D%E6%96%9C%E6%9D%A0%E5%AD%97%E7%AC%A6%E8%BD%AC%E4%B9%89/" rel="next" title="Python碎片日记13——字符串：操作、反斜杠字符转义">
+                  <i class="fa fa-chevron-left"></i> Python碎片日记13——字符串：操作、反斜杠字符转义
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/14/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B015%E2%80%94%E2%80%94%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%AF%94%E8%BE%83%E3%80%81True&False%E3%80%81None%E3%80%81Type%E5%AF%B9%E8%B1%A1%E3%80%81%E4%B8%80%E9%83%A8%E5%88%86%E8%AF%AD%E5%8F%A5/" rel="prev" title="Python碎片日记15——对象的比较、True&False、None、Type对象、一部分语句">
+                  Python碎片日记15——对象的比较、True&False、None、Type对象、一部分语句 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#代码转换"><span class="nav-number">1.</span> <span class="nav-text">代码转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多次修改优化"><span class="nav-number">2.</span> <span class="nav-text">多次修改优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式化"><span class="nav-number">3.</span> <span class="nav-text">格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、-格式化表达式"><span class="nav-number">3.1.</span> <span class="nav-text">1、%格式化表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于字典的格式化"><span class="nav-number">3.1.1.</span> <span class="nav-text">基于字典的格式化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、format格式化调用方法"><span class="nav-number">3.2.</span> <span class="nav-text">2、format格式化调用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#中添加具体格式化"><span class="nav-number">3.2.1.</span> <span class="nav-text">{}中添加具体格式化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与format比较"><span class="nav-number">3.3.</span> <span class="nav-text">%与format比较</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">26k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>

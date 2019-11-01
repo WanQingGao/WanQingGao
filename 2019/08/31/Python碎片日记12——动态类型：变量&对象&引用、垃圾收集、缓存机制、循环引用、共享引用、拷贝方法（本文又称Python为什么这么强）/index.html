@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="动态类型动态类型是Python中很重要的概念，是Python灵活性和多态性的基础。在Python中，类型并不需要提前进行声明，而是在运行中自动判定，这大大简化了编程的代码。">
+<meta name="keywords" content="Python,动态类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python碎片日记12——动态类型：变量&amp;对象&amp;引用、垃圾收集、缓存机制、循环引用、共享引用、拷贝方法（本文又称Python为什么这么强）">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;08&#x2F;31&#x2F;Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B012%E2%80%94%E2%80%94%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%8F%98%E9%87%8F&amp;%E5%AF%B9%E8%B1%A1&amp;%E5%BC%95%E7%94%A8%E3%80%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E3%80%81%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E3%80%81%E6%8B%B7%E8%B4%9D%E6%96%B9%E6%B3%95%EF%BC%88%E6%9C%AC%E6%96%87%E5%8F%88%E7%A7%B0Python%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BC%BA%EF%BC%89&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="动态类型动态类型是Python中很重要的概念，是Python灵活性和多态性的基础。在Python中，类型并不需要提前进行声明，而是在运行中自动判定，这大大简化了编程的代码。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019083109165663.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20190831105122870.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019083110593439.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-10-31T13:03:48.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2019083109165663.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://yoursite.com/2019/08/31/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B012%E2%80%94%E2%80%94%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%8F%98%E9%87%8F&%E5%AF%B9%E8%B1%A1&%E5%BC%95%E7%94%A8%E3%80%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E3%80%81%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E3%80%81%E6%8B%B7%E8%B4%9D%E6%96%B9%E6%B3%95%EF%BC%88%E6%9C%AC%E6%96%87%E5%8F%88%E7%A7%B0Python%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BC%BA%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python碎片日记12——动态类型：变量&对象&引用、垃圾收集、缓存机制、循环引用、共享引用、拷贝方法（本文又称Python为什么这么强） | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/31/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B012%E2%80%94%E2%80%94%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%8F%98%E9%87%8F&%E5%AF%B9%E8%B1%A1&%E5%BC%95%E7%94%A8%E3%80%81%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E3%80%81%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%85%B1%E4%BA%AB%E5%BC%95%E7%94%A8%E3%80%81%E6%8B%B7%E8%B4%9D%E6%96%B9%E6%B3%95%EF%BC%88%E6%9C%AC%E6%96%87%E5%8F%88%E7%A7%B0Python%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BC%BA%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python碎片日记12——动态类型：变量&对象&引用、垃圾收集、缓存机制、循环引用、共享引用、拷贝方法（本文又称Python为什么这么强）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-31 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-31T00:00:00+08:00">2019-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 21:03:48" itemprop="dateModified" datetime="2019-10-31T21:03:48+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python碎片日记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="动态类型"><a href="#动态类型" class="headerlink" title="动态类型"></a>动态类型</h1><p>动态类型是Python中很重要的概念，是Python灵活性和多态性的基础。<br>在Python中，类型并不需要提前进行声明，而是在运行中自动判定，这大大简化了编程的代码。</p>
+<a id="more"></a>
+<p>那么它是如何实现的呢？</p>
+<h2 id="变量-amp-对象-amp-引用"><a href="#变量-amp-对象-amp-引用" class="headerlink" title="变量&amp;对象&amp;引用"></a>变量&amp;对象&amp;引用</h2><p>在Python中，变量是在赋值的时候才创建的。因此变量在使用之前必须先赋值。<br>当给一个变量赋值（对象）时，其内部是将对象引用给变量名：<br><img src="https://img-blog.csdnimg.cn/2019083109165663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"> </p>
+<ul>
+<li>变量：是一个系统表的元素，拥有指向对象的连接的空间。</li>
+<li>对象：是分配的一块内存。</li>
+<li>引用：是自动形成的从变量到对象的指针。（谁说Python里没有指针的？大骗纸！o(´^｀)o）<br>从概念上讲，每次运行一个表达式，Python就创建一个新对象，并将对象和变量名通过引用连接起来。变量名不再像C语言中那样是和对象完全粘合在一起的（在c中，变量是一个不可改变的内存区域的标签），通过改变引用，变量名可以和任意对象连接起来，从代码角度看，即是变量可以任意改变类型。</li>
+</ul>
+<p> <strong>类型属于对象，而不是变量</strong>。</p>
+<h2 id="垃圾收集"><a href="#垃圾收集" class="headerlink" title="垃圾收集"></a>垃圾收集</h2><p> Python的便捷性的另一个表现是它不需要手动清理变量内存，这是如何做到的呢？<br> Python的每个对象有着更复杂的结构，除了它的值，还有两个标准的头部信息：</p>
+<ul>
+<li>类型标志符：用来标识这个对象的类型。对象记录了类型，变量就不需要另声明类型了。</li>
+<li>引用的计数器：用来记录该对象被引用的次数。当引用的计数器变零，即说明该对象已经不被需要，系统会将此对象占用的空间自动回收（自动放在自由内存空间池，等待后来的对象使用）。这种技术叫做垃圾收集。<br>想要查看一个对象被引用了多少次，可以使用sys块中的getrefcount()函数获得：<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.getrefcount(<span class="number">1</span>) <span class="comment">#查看数字1被引用的次数</span></span><br></pre></td></tr></table></figure>
+<h2 id="缓存机制"><a href="#缓存机制" class="headerlink" title="缓存机制"></a>缓存机制</h2>缓存机制是Python的一个优化措施。一些小的整数和字符串在编程中被使用的频率很高，如果不停地创建和回收会降低性能。为此，Python将这些对象放在缓存中（而不是真正的、新的内存块），这些对象创建之后可以被多次引用而不再被回收，提高了运行的效率。<h2 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h2>变量引用了对象，那么如果对象再包含了其他引用，就有可能造成循环引用。最简单的例子就是列表：<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">a.append(a)</span><br><span class="line">a <span class="comment">#结果为[1, 2, 3, [...]]</span></span><br></pre></td></tr></table></figure>
+这里面列表变量a引用的对象里包含了本身，造成了循环引用，因此输出结果直接用[…]代替，因为这是无限循环的。（对于字典也会有相似效果）<br>Python的垃圾收集除了基于计数器，对于这种循环引用的对象也可以及时检测并回收。关于循环检测器的更多细节，可以查看Python库手册中的gc模块。<h2 id="共享引用"><a href="#共享引用" class="headerlink" title="共享引用"></a>共享引用</h2>当使用一个变量赋值给另一个变量时，就发生了共享引用。<br><img src="https://img-blog.csdnimg.cn/20190831105122870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">那么，当a改变之后，b是否会改变呢？这就涉及到了之前日记中写的对象的不可变性了。<ul>
+<li>对于不可变类型：由于该类型是不可变的，当a重新赋值后，其指向的对象必然是另一个对象，结果如下：<img src="https://img-blog.csdnimg.cn/2019083110593439.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbnFpbmdfZ2Fv,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">a与b指向两个不同对象，二者不再使用共享引用，因此是不会干扰的。</li>
+<li>对于可变类型：由于对象是可变的，那么当a发生变化后（前提是在原对象基础上改变，比如列表加个元素这样的）它指向的对象还是原来的对象。a与b仍旧保持着原来共享引用的关系，共同引用着同一个对象。因此在a发生改变后，b也发生了改变。<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b = a</span><br><span class="line">a.append(<span class="number">4</span>)</span><br><span class="line">b <span class="comment">#[1, 2, 3, 4]表面上b没有发生改变，但由于对a操作了，b也随之改变了</span></span><br></pre></td></tr></table></figure>
+因此，<strong>对可变类型的共享引用操作时要格外小心</strong>。<br>那么，如何避免这种现象呢？我们可以copy一个可变对象，这样新旧变量就不再共享引用，而是引用了两个长得一样却不同的对象，就不会出现上面的干扰现象。<h1 id="拷贝方法"><a href="#拷贝方法" class="headerlink" title="拷贝方法"></a>拷贝方法</h1>copy的方法可以有：</li>
+<li>X.copy():使用该类型自带的复制方法。（这是浅拷贝）</li>
+<li>切片：Y = X[:] （无条件切片是浅拷贝）</li>
+<li>内置函数如list(L)</li>
+<li>使用copy模块：<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> copy</span><br><span class="line"> X = copy.copy(Y) <span class="comment">#浅拷贝，只拷贝一层，对于深层嵌套，依旧是引用而非复制</span></span><br><span class="line"> X = copy.deepcopy(Y) <span class="comment">#深拷贝，全部拷贝</span></span><br><span class="line"></span><br><span class="line">X = L * <span class="number">4</span> <span class="comment">#此处的L是拷贝</span></span><br><span class="line">X = [L] * <span class="number">4</span> <span class="comment">#此处的L是引用</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<p>此外，类型的不可变性也同样解释了前面提到的循环引用的问题，为什么列表、字典可以无限循环？因为列表、字典是可变的，可以在第二次赋值时引用自身（第一次是用来初始化），而第二次赋值后的对象还是原对象，最后造成无限循环。<br>如果是对于不可变的类型呢？按照推理，应该是简单的值改变而不再无限循环吧。。。hhh，我并没有找到不可变类型中可以实现类似的操作，比如元组本身是不能增删改的、集合虽然能添加新项但添加的内容受限并不能是set类型，所以都无法做到引用自身变量这种操作，于是我还没找到这种情况的实例用来验证。。。总之，不可变类型的引用是十分安全的（不然也不会用缓存机制允许一个对象被不受限制地引用）。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B/" rel="tag"># 动态类型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/08/30/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B011%E2%80%94%E2%80%94%E5%B0%91%E8%A7%81%E7%9A%84%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%B0%8F%E6%95%B0%E3%80%81%E5%88%86%E6%95%B0%E3%80%81%E5%B8%83%E5%B0%94/" rel="next" title="Python碎片日记11——少见的数字类型：小数、分数、布尔">
+                  <i class="fa fa-chevron-left"></i> Python碎片日记11——少见的数字类型：小数、分数、布尔
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/09/04/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B013%E2%80%94%E2%80%94%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%9A%E6%93%8D%E4%BD%9C%E3%80%81%E5%8F%8D%E6%96%9C%E6%9D%A0%E5%AD%97%E7%AC%A6%E8%BD%AC%E4%B9%89/" rel="prev" title="Python碎片日记13——字符串：操作、反斜杠字符转义">
+                  Python碎片日记13——字符串：操作、反斜杠字符转义 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#动态类型"><span class="nav-number">1.</span> <span class="nav-text">动态类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#变量-amp-对象-amp-引用"><span class="nav-number">1.1.</span> <span class="nav-text">变量&amp;对象&amp;引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集"><span class="nav-number">1.2.</span> <span class="nav-text">垃圾收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存机制"><span class="nav-number">1.3.</span> <span class="nav-text">缓存机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环引用"><span class="nav-number">1.4.</span> <span class="nav-text">循环引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享引用"><span class="nav-number">1.5.</span> <span class="nav-text">共享引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拷贝方法"><span class="nav-number">2.</span> <span class="nav-text">拷贝方法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">26k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>

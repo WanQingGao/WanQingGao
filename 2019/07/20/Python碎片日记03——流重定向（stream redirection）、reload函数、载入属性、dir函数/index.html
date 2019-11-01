@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.2">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="流重定向（stream redirection）即是改变输出流的输出位置，方法有三：">
+<meta name="keywords" content="Python,流重定向,reload,载入属性,dir函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python碎片日记03——流重定向（stream redirection）、reload函数、载入属性、dir函数">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;07&#x2F;20&#x2F;Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B003%E2%80%94%E2%80%94%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91%EF%BC%88stream%20redirection%EF%BC%89%E3%80%81reload%E5%87%BD%E6%95%B0%E3%80%81%E8%BD%BD%E5%85%A5%E5%B1%9E%E6%80%A7%E3%80%81dir%E5%87%BD%E6%95%B0&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="流重定向（stream redirection）即是改变输出流的输出位置，方法有三：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-31T08:47:43.994Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/07/20/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B003%E2%80%94%E2%80%94%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91%EF%BC%88stream%20redirection%EF%BC%89%E3%80%81reload%E5%87%BD%E6%95%B0%E3%80%81%E8%BD%BD%E5%85%A5%E5%B1%9E%E6%80%A7%E3%80%81dir%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python碎片日记03——流重定向（stream redirection）、reload函数、载入属性、dir函数 | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/20/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B003%E2%80%94%E2%80%94%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91%EF%BC%88stream%20redirection%EF%BC%89%E3%80%81reload%E5%87%BD%E6%95%B0%E3%80%81%E8%BD%BD%E5%85%A5%E5%B1%9E%E6%80%A7%E3%80%81dir%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python碎片日记03——流重定向（stream redirection）、reload函数、载入属性、dir函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-20 11:34:18" itemprop="dateCreated datePublished" datetime="2019-07-20T11:34:18+08:00">2019-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-10-31 16:47:43" itemprop="dateModified" datetime="2019-10-31T16:47:43+08:00">2019-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python碎片日记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="流重定向（stream-redirection）"><a href="#流重定向（stream-redirection）" class="headerlink" title="流重定向（stream redirection）"></a>流重定向（stream redirection）</h1><p>即是改变输出流的输出位置，方法有三：</p>
+<a id="more"></a>
+<h2 id="1-使用shell："><a href="#1-使用shell：" class="headerlink" title="1.使用shell："></a>1.使用shell：</h2><p>  使用shell命令启动python程序，并将输出结果定向输出到一个文件中，从而保存起来以备以后查看或使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% python script.py &gt; saveit.txt</span><br></pre></td></tr></table></figure>
+<p>同理，对于输入也可以使用流重定向：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% python spam.py &lt; input.txt</span><br></pre></td></tr></table></figure>
+
+<p>摘自《Python学习手册》P56</p>
+<h2 id="2-使用sys块"><a href="#2-使用sys块" class="headerlink" title="2.使用sys块"></a>2.使用sys块</h2><p>在编写Python程序过程中，也可以通过sys块完成流重定向：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment">#  temp = sys.stdout ##保存原来的输出流方式</span></span><br><span class="line">sys.stdout = open(<span class="string">'saveit.txt'</span>, <span class="string">'a'</span>)</span><br><span class="line"><span class="comment">#之后所有print输出都放到上述文件中</span></span><br><span class="line">print()</span><br><span class="line">sys.stdout.write() <span class="comment">#效果同print()</span></span><br><span class="line"></span><br><span class="line">sys.stdout.close()</span><br><span class="line"><span class="comment">#  sys.stdout = temp ##恢复原来保存的输出流方式</span></span><br><span class="line">print(<span class="string">'this is an error!'</span>, file=sys.stderr) <span class="comment">#将错误信息输出到标准错误流上</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-使用print（）中的file"><a href="#3-使用print（）中的file" class="headerlink" title="3.使用print（）中的file"></a>3.使用print（）中的file</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">saveit = open(<span class="string">'saveit.txt'</span>, <span class="string">'a'</span>)</span><br><span class="line">print(<span class="string">'fff'</span>, file=saveit) <span class="comment">#仅将此句话进行流重定向</span></span><br><span class="line">sys.stdout.close()</span><br></pre></td></tr></table></figure>
+
+<h1 id="reload函数"><a href="#reload函数" class="headerlink" title="reload函数"></a>reload函数</h1><p>在默认情况下，对同一py文件import仅会在第一次运行。在第一次导入后，其他导入都不会再工作，因为导入是一个开销很大的操作，以至于每个文件、每个程序运行不能够重复多于一次。如果想要重复运行同一文件，需要使用reload函数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> script1  <span class="comment"># 第一次导入</span></span><br><span class="line"><span class="keyword">from</span> imp <span class="keyword">import</span> reload</span><br><span class="line">reload(script1) <span class="comment">#第二次导入</span></span><br></pre></td></tr></table></figure>
+<p>reload函数载入并运行了文件最新版本的代码，如果在另一个窗口修改并保存了script1文件，那将会反映出修改的变化。<br><strong>注意</strong>：</p>
+<ul>
+<li>reload是再次加载（重载），在使用之前必须确保文件已经有第一次加载了。</li>
+<li>reload不可传递，它一次只能重载一个模块，而不能同时重载模块中导入的模块，因此有时会需要导入多个模块。</li>
+<li>另一种避免重载的方法： <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(open(<span class="string">'script.py'</span>).read())</span><br></pre></td></tr></table></figure>
+   这种方法相当于将模块内容复制粘贴过来，因此不再需要import或者reload，但是由于没有独立命名空间，模块的一些与当前程序中同名的变量会将当前程序的变量覆盖。</li>
+</ul>
+<h1 id="载入模块属性"><a href="#载入模块属性" class="headerlink" title="载入模块属性"></a>载入模块属性</h1><p>一个py文件相当于一个模块（即是变量名的封装、命名空间），模块是Python程序最大的程序结构，导入模块某属性的方法有两种：</p>
+<ol>
+<li>import与“.”:</li>
+</ol>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> myfile</span><br><span class="line">print(myfile.title)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>import与from:</li>
+</ol>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> myfile <span class="keyword">import</span> title</span><br><span class="line">print(title)</span><br></pre></td></tr></table></figure>
+<h1 id="dir函数"><a href="#dir函数" class="headerlink" title="dir函数"></a>dir函数</h1><p>可以使用dir函数获得一个模块文件内部的可用的变量名的列表，其中会包含一些Python预定义的内置变量名（以下划线开头和结尾的变量名）。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir(myfile)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Python学习手册</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E6%B5%81%E9%87%8D%E5%AE%9A%E5%90%91/" rel="tag"># 流重定向</a>
+              <a href="/tags/reload/" rel="tag"># reload</a>
+              <a href="/tags/%E8%BD%BD%E5%85%A5%E5%B1%9E%E6%80%A7/" rel="tag"># 载入属性</a>
+              <a href="/tags/dir%E5%87%BD%E6%95%B0/" rel="tag"># dir函数</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/07/16/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B002%E2%80%94%E2%80%94zip()%E3%80%81lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E3%80%81map()/" rel="next" title="Python碎片日记02——zip()、lambda表达式、map()">
+                  <i class="fa fa-chevron-left"></i> Python碎片日记02——zip()、lambda表达式、map()
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/07/22/Python%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B004%E2%80%94%E2%80%94%E5%BA%8F%E5%88%97%E3%80%81%E5%8F%AF%E5%8F%98%E6%80%A7%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7%E3%80%81%E5%88%A4%E6%96%AD%E5%8F%AF%E5%8F%98%E6%80%A7%E7%9A%84%E4%B8%80%E4%B8%AA%E8%AF%AF%E5%8C%BA%E3%80%81%E4%B8%BB%E8%A6%81%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%88%86%E7%B1%BB%E5%92%8C%E5%8F%AF%E5%8F%98%E6%80%A7%E3%80%81%E5%AF%B9%E8%B1%A1%E7%81%B5%E6%B4%BB%E6%80%A7/" rel="prev" title="Python碎片日记04——序列、可变性与不可变性、判断可变性的一个误区、主要对象类型的分类和可变性、对象灵活性">
+                  Python碎片日记04——序列、可变性与不可变性、判断可变性的一个误区、主要对象类型的分类和可变性、对象灵活性 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#流重定向（stream-redirection）"><span class="nav-number">1.</span> <span class="nav-text">流重定向（stream redirection）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用shell："><span class="nav-number">1.1.</span> <span class="nav-text">1.使用shell：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用sys块"><span class="nav-number">1.2.</span> <span class="nav-text">2.使用sys块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用print（）中的file"><span class="nav-number">1.3.</span> <span class="nav-text">3.使用print（）中的file</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reload函数"><span class="nav-number">2.</span> <span class="nav-text">reload函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#载入模块属性"><span class="nav-number">3.</span> <span class="nav-text">载入模块属性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dir函数"><span class="nav-number">4.</span> <span class="nav-text">dir函数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">26k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">43 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>
