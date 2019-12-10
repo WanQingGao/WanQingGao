@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/wan-32.ico?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/wan-32.ico?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/wan-16.ico?v=7.4.2">
+  <link rel="mask-icon" href="/images/wan-32.ico?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一些基本概念局域网LAN星型结构，多个设备接到一个交换机上，多个这样的交换机再接到中心交换机上。（有点像树形）覆盖范围小，带宽固定（有10M\100M\1000M)(这个是多年前的，现在应该不止这些)，设备自己买、自己维护。设备到交换机不超过100米，交换机到下一个交换机不超过100米。">
+<meta name="keywords" content="计算机网络,基本概念,数据,OSI七层结构,性能指标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络学习日记01——基本概念、数据、OSI七层结构、性能指标">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;04&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B001%E2%80%94%E2%80%94%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E3%80%81%E6%95%B0%E6%8D%AE%E3%80%81OSI%E4%B8%83%E5%B1%82%E7%BB%93%E6%9E%84%E3%80%81%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="一些基本概念局域网LAN星型结构，多个设备接到一个交换机上，多个这样的交换机再接到中心交换机上。（有点像树形）覆盖范围小，带宽固定（有10M\100M\1000M)(这个是多年前的，现在应该不止这些)，设备自己买、自己维护。设备到交换机不超过100米，交换机到下一个交换机不超过100米。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E4%BA%92%E8%81%94%E7%BD%91%E6%98%9F%E5%9E%8B%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E4%BA%92%E8%81%94%E7%BD%91.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E6%95%B0%E6%8D%AE%E5%B0%81%E8%A3%85.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E8%BF%87%E7%A8%8B.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E5%8F%91%E9%80%81%E6%97%B6%E5%BB%B6%E4%B8%8E%E4%BC%A0%E6%92%AD%E6%97%B6%E5%BB%B6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01OSI%E5%92%8CDoD%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:updated_time" content="2019-12-10T07:45:00.712Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;01%E4%BA%92%E8%81%94%E7%BD%91%E6%98%9F%E5%9E%8B%E7%BB%93%E6%9E%84.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B001%E2%80%94%E2%80%94%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E3%80%81%E6%95%B0%E6%8D%AE%E3%80%81OSI%E4%B8%83%E5%B1%82%E7%BB%93%E6%9E%84%E3%80%81%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>计算机网络学习日记01——基本概念、数据、OSI七层结构、性能指标 | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B001%E2%80%94%E2%80%94%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E3%80%81%E6%95%B0%E6%8D%AE%E3%80%81OSI%E4%B8%83%E5%B1%82%E7%BB%93%E6%9E%84%E3%80%81%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络学习日记01——基本概念、数据、OSI七层结构、性能指标
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-04 00:00:00" itemprop="dateCreated datePublished" datetime="2019-11-04T00:00:00+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-10 15:45:00" itemprop="dateModified" datetime="2019-12-10T15:45:00+08:00">2019-12-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a><h1 id="一些基本概念"><a href="#一些基本概念" class="headerlink" title="一些基本概念"></a>一些基本概念</h1><h2 id="局域网LAN"><a href="#局域网LAN" class="headerlink" title="局域网LAN"></a>局域网LAN</h2><p>星型结构，多个设备接到一个交换机上，多个这样的交换机再接到中心交换机上。（有点像树形）<br>覆盖范围小，带宽固定（有10M\100M\1000M)(这个是多年前的，现在应该不止这些)，设备自己买、自己维护。设备到交换机不超过100米，交换机到下一个交换机不超过100米。</p><a id="more"></a>
+
+
+<ul>
+<li>设备-交换机：接入层；交换机端口要多；</li>
+<li>交换机-交换机：汇聚层；带宽要宽；<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01%E4%BA%92%E8%81%94%E7%BD%91%E6%98%9F%E5%9E%8B%E7%BB%93%E6%9E%84.png" alt="01互联网星型结构"><h2 id="广域网"><a href="#广域网" class="headerlink" title="广域网"></a>广域网</h2>距离比较远，超过100米，花钱买服务（带宽），由他人进行维护。所谓买的带宽是指在同<br>个ISP下的网络带宽，当跨ISP时，实际带宽自然会下降。</li>
+</ul>
+<h2 id="Internet"><a href="#Internet" class="headerlink" title="Internet"></a>Internet</h2><p>最大的广域网，由众多ISP（Internet service provider）组成。ISP是internet服务提供商，比如电信、网通······ 每个ISP有自己的机房，对网民提供访问Internet连接，这个连接可以是ADSL、光纤到户······<br>同个ISP之间传输网络较多，相互之间传输较快，不同ISP之间传输线路少，传输较慢，因此（在过去）跨ISP上网是很慢的。有的网站在多个ISP建立服务器，在访问（下载）时会询问电信下载、网通下载，就是为了选择一致的ISP网络，避免跨ISP导致速度下降。<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E4%BA%92%E8%81%94%E7%BD%91.png" alt="01计算机网络-互联网"></p>
+<h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><p>每个机房（DNS、使用者、通信公司服务器等所有连接到互联网上的机器）上的存储位置有一个ip地址，每个IP地址（Internet中）独一无二，不能重复。就像电话号码一样。<br><strong>一个计算机可以有多个IP地址</strong><br>一个网段中IP地址的网络部分要一样。</p>
+<h2 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h2><p>用来告诉计算机IP地址中哪儿是网络部分，哪是主机部分。前几个1就代表前几位是网络部分。<br>路由器的ip地址，一般是所连接设备中第一个地址（已经是不成文的规定）。如连接设备有15.0.0.2、15.0.0.3等，路由地址为15.0.0.1，网段是15.0.0.0。路由器的作用是给不同网段传输数据，相当于计算机中的网卡。<strong>网关地址</strong>是设备要直接连接的目标网段IP（如计算机连路由器，则计算机的网关地址是15.0.0.1）(255.255.255.0又可以写作/24)</p>
+<h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><p>48位二进制，又称为物理地址，每个接口都有，计算机、路由器、网卡出厂时就已内嵌好，全球唯一。<br><strong>可以通过修改注册表修改Mac地址</strong>                                                                                                                                      </p>
+<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><p>用来记录和解析域名的服务器，可以将域名解析为ip地址，从而找到对应网站的实际存储位置。</p>
+<h1 id="发送的数据"><a href="#发送的数据" class="headerlink" title="发送的数据"></a>发送的数据</h1><p>（这里的+是指接连发送，而不是加法。。）<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01%E6%95%B0%E6%8D%AE%E5%B0%81%E8%A3%85.png" alt="01数据封装"></p>
+<h2 id="上层数据"><a href="#上层数据" class="headerlink" title="上层数据"></a>上层数据</h2><p>最原始的数据，在广义应用层上传输。</p>
+<h2 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h2><p>数据 + TCP<br>在<strong>传输层</strong>传输，又称为“消息”。</p>
+<h2 id="数据包"><a href="#数据包" class="headerlink" title="数据包"></a>数据包</h2><p>数据段+源IP地址+目标IP地址<br>目标IP地址指的是域名解析后网站所在服务器的IP地址。<br>数据包代表了数据最初起到和最后终点。<br>在<strong>网络层</strong>传输。</p>
+<h2 id="数据帧"><a href="#数据帧" class="headerlink" title="数据帧"></a>数据帧</h2><p>数据包+源Mac地址+下一站Mac地址 + 差错校验FCS<br>如果一个计算机连接着路由器，那么其下一站Mac地址即为路由器的Mac地址。当数据从路由到下一个节点时，源Mac地址变为路由器的Mac地址，而下一站Mac地址变为下一节点的Mac地址。<br>数据帧代表了当前位置和下一站位置。<br>在<strong>数据链路层</strong>传输。</p>
+<p><strong>数据包在网络传输中保持不变，数据帧每经过一个设备就要重封装一次。</strong> 由于数据包不变，在整个传输过程中，源IP地址都是<strong>可知</strong>的。</p>
+<h2 id="路由器-amp-交换机"><a href="#路由器-amp-交换机" class="headerlink" title="路由器&amp;交换机"></a>路由器&amp;交换机</h2><p>路由器只能解析IP地址，根据目标IP地址来选择接下来信息传送的路线（这选择方向是管理员在路由器设置的路由表来配置的（静态路由），或自动学习得（动态路由），每一条线就是一条路由）。<br>交换机能解析Mac地址，根据下一跳Mac地址选择下一个传送的站点。<br>路由器也有MAC地址。</p>
+<h2 id="数据的传输"><a href="#数据的传输" class="headerlink" title="数据的传输"></a>数据的传输</h2><p>一般数据会比较大，所以需要分块来发，每一个块被整理成一个小数据包，然后每个数据包上编上号，依次进行传输。首先，发送方先将前几个数据包打包成数据帧放到<strong>缓存</strong>里，几个数据包一个一个开始发送。当1号数据帧发送后，缓存中的1号并没有删除（以防传丢了还得重新放入缓存）。接收端收到1号数据帧后，会向源地址发送一个确认。当发送端收到了确认收到后，再删除缓存中的1号数据帧，并加入一个新数据帧。而后再发送第二个数据帧。。。以此类推。。。<br>接收端接受数据帧也是先放在缓存中，然后再取出，拼凑成完整数据。（有时候一边拼凑一边显示，因此在显示过程中有的文字先显示出来，而图片要慢一些才显示完整）</p>
+<h1 id="OSI参考模型"><a href="#OSI参考模型" class="headerlink" title="OSI参考模型"></a>OSI参考模型</h1><p><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E8%BF%87%E7%A8%8B.png" alt="01数据传输过程"></p>
+<h2 id="七层结构（由上到下）："><a href="#七层结构（由上到下）：" class="headerlink" title="七层结构（由上到下）："></a>七层结构（由上到下）：</h2><ol>
+<li><strong>应用层</strong>：所有能产生<strong>网络流量</strong>的程序。（没产生流量的某些本地应用不属于应用层！）</li>
+<li><strong>表示层</strong>：在传输之前是否进行<strong>加密、压缩、编码</strong>处理。是应用开发人员需要考虑的，比如QQ、微信在聊天过程中内容会被加密，图片会被压缩。（加密可以确保安全性，压缩可以保证在同等带宽情况下传输更快，编码是表示层的，出现乱码是表示层出现问题了）</li>
+<li><strong>会话层</strong>：建立会话进行<strong>网络交互</strong>。当断开网络、关闭网页时，会话停止。可以查看计算机是否中了木马（如盗取信息、远程监控，在后台察觉）。在cmd中输入<code>netstat -n</code>可以查看当前网络会话。输入<code>netstat -nb</code>能够看到建立会话的程序是什么。（命令加上<code>/?</code>即可查询有哪些具体指令，比如<code>netstat /?</code>）</li>
+<li><strong>传输层</strong>：可以进行<strong>可靠传输、流量控制、不可靠传输</strong>，可靠传输是指当数据在网络中丢失后，接收端没有接收到数据，发送到也没有接收到接收端的收到信号，会再次发送一边之前的数据。流量控制可以通过减少放在缓存中的数量减慢传输速度（好处是节省缓存）。有时候（比如查询域名、QQ聊天发送短信息）一个数据包、一次通讯即可完成全部，这样就不需要缓存，也不需要分块，这样的传输即是不可靠传输。</li>
+<li><strong>网络层</strong>：负责<strong>选择最佳路径、规划IP地址</strong>。</li>
+<li><strong>数据链路层</strong>：定义了数据帧的开始和结束，可以进行<strong>透明传输、差错校验</strong>。（一串01数据，哪一位是数据帧的开始，哪一位是数据帧的结尾）（透明传输：如果数据有和开始符或结尾符相同的编码，会在此段相似编码前面增加一特殊位，告诉接收端这不是开始/结束，在接收数据后会将这一位再删掉。）（差错检查只负责检查，正确留下，错误扔掉，不进行纠正，纠正是在传输层）</li>
+<li><strong>物理层</strong>：定义了物理设备的<strong>接口标准、电气标准</strong>。解决如何在物理链路上传输更快。</li>
+</ol>
+<h2 id="排查故障"><a href="#排查故障" class="headerlink" title="排查故障"></a>排查故障</h2><p>每一层较为独立，某一层的改变不会影响其他层。在设计和开发时，不要跨层设计，不然对以后维护会十分麻烦。当出现网络故障时，应从下向上一层一层查找故障（越向上层故障越复杂）：</p>
+<ol>
+<li><strong>物理层</strong>：查看数据连接状态、发送和接收数据包状态。当网络显示连接，但上不去网时，可以打开其连接状态查看，如果有已发送数据包但无已接收数据包，那么可能是网线的水晶接头没接好。（8根线，接收的两根断了）</li>
+<li><strong>数据链路层</strong>：如MAC地址冲突、ADSL欠费、带宽（传输速度）协商不统一、计算机连接到错误的VLAN(虚拟局域网)。带宽协商可以在计算机中修改。</li>
+<li><strong>网络层</strong>：IP地址or子网掩码错误（计算机IP地址和网段不符、路由器上没有目标网段的路由方向）、计算机没配网关（无法访问其他网段）、网络传输故障（数据包丢失）。</li>
+<li><strong>应用层</strong>：应用程序配置错误。</li>
+</ol>
+<h2 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h2><ol>
+<li><strong>物理层</strong>：当一个网络接线口不使用时，应把其源头的交换机关闭或者断开，而不是保持连接，否则任何外部设备都可以进行连接，是很不安全的。</li>
+<li><strong>数据链路层</strong>：ADSL账号、密码，无线网络的账号、密码，创建VLAN，交换机端口绑定MAC地址，这些都存在着数据链路层的安全风险。</li>
+<li><strong>网络层</strong>：在路由器上使用ACL控制数据包流量、开启和关闭防火墙。</li>
+<li><strong>应用层</strong>：应用程序漏洞</li>
+</ol>
+<p>在实际中，常常把<strong>应用层</strong>、<strong>表示层</strong>、<strong>会话层</strong>合在一起称为应用层。把<strong>数据链路层</strong>、<strong>物理层</strong>合在一起称为网络接口层。</p>
+<h1 id="计算机网络的性能指标"><a href="#计算机网络的性能指标" class="headerlink" title="计算机网络的性能指标"></a>计算机网络的性能指标</h1><ol>
+<li>速率：连接在计算机网络上的主机在数字信道上传送数据位数的速率，即<strong>比特率</strong>。英文data rate或bit rate，单位b/s，kb/s，Mb/s，Gb/s。比如说带宽、交换机速度是多少兆的，这里的单位都是比特率（而检测显示时单位一般是字节每秒，是相差8倍的）。说速率时是指某一条信道上的流量，而不是接收端总的流量。不同信道可以有不同速率。</li>
+<li>带宽：某个网口所接信道的<strong>最高</strong>传输速率。单位同速率。</li>
+<li>网络吞吐量：单位时间内通过某个网络的数据量。即是该网络所接所有信道的速率和。</li>
+<li>时延：送数据时，数据块从结点进入到传输媒体所需要的时间。也就是从发送数据帧的第一个比特算起，到该帧的最后一个比特发送完毕所需的时间。包括发送时延、传播时延、处理时延和排队时延。发送时延 = 数据块长度（比特）/信道速率（带宽）（比特/秒）。传播时延 = 信道长度（米）/传播速度（米/秒）。这个传播速度和介质有关，是固定改不了的，因此传播时延是固定的。但是带宽是可以人工设置的，所以发送时延是可以改变的。光纤的传播速度比铜线慢一些，但是铜线不能支持高信道速率（电信号高频衰减会比光信号差，与波长有关），所以光纤的发送时延要短，铜线的传播时延要短。<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01%E5%8F%91%E9%80%81%E6%97%B6%E5%BB%B6%E4%B8%8E%E4%BC%A0%E6%92%AD%E6%97%B6%E5%BB%B6.png" alt="01发送时延与传播时延"></li>
+<li>时延带宽积：时延乘以带宽。表示有多少数据在线路上，即以比特为单位的链路长度。</li>
+<li>往返时间RTT：从发送方发送数据开始，到发送方收到接收方确认。用ping命令可以测试到某个网站或者某个ip地址的往返时间。</li>
+<li>网络利用率：包括信道利用率和网络利用率。信道利用率=有数据通过的时间/有+无数据通过的时间；网络利用率为信道利用率的加权平均值。网络利用率越高，时延越长，因此网络几乎不可能达到百分百利用，当百分比利用时网络已经堵塞，无法使用了。</li>
+</ol>
+<h1 id="OSI和DoD模型"><a href="#OSI和DoD模型" class="headerlink" title="OSI和DoD模型"></a>OSI和DoD模型</h1><p><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/01OSI%E5%92%8CDoD%E6%A8%A1%E5%9E%8B.png" alt="01OSI和DoD模型"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/tags/%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" rel="tag"># 基本概念</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE/" rel="tag"># 数据</a>
+              <a href="/tags/OSI%E4%B8%83%E5%B1%82%E7%BB%93%E6%9E%84/" rel="tag"># OSI七层结构</a>
+              <a href="/tags/%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/" rel="tag"># 性能指标</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/31/C++%E7%A2%8E%E7%89%87%E6%97%A5%E8%AE%B003%E2%80%94%E2%80%94%E6%95%B0%E7%BB%84%E5%90%8D%E4%B8%8E%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%8D%E5%90%8C/" rel="next" title="C++碎片日记03——数组名与指针的不同">
+                  <i class="fa fa-chevron-left"></i> C++碎片日记03——数组名与指针的不同
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B002%E2%80%94%E2%80%94%E7%89%A9%E7%90%86%E5%B1%82%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" rel="prev" title="计算机网络学习日记02——物理层基本概念">
+                  计算机网络学习日记02——物理层基本概念 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzMzOS8yMzgzOQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基本概念"><span class="nav-number">1.</span> <span class="nav-text">一些基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网LAN"><span class="nav-number">1.1.</span> <span class="nav-text">局域网LAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广域网"><span class="nav-number">1.2.</span> <span class="nav-text">广域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Internet"><span class="nav-number">1.3.</span> <span class="nav-text">Internet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP地址"><span class="nav-number">1.4.</span> <span class="nav-text">IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子网掩码"><span class="nav-number">1.5.</span> <span class="nav-text">子网掩码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAC地址"><span class="nav-number">1.6.</span> <span class="nav-text">MAC地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">1.7.</span> <span class="nav-text">DNS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#发送的数据"><span class="nav-number">2.</span> <span class="nav-text">发送的数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#上层数据"><span class="nav-number">2.1.</span> <span class="nav-text">上层数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据段"><span class="nav-number">2.2.</span> <span class="nav-text">数据段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包"><span class="nav-number">2.3.</span> <span class="nav-text">数据包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据帧"><span class="nav-number">2.4.</span> <span class="nav-text">数据帧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路由器-amp-交换机"><span class="nav-number">2.5.</span> <span class="nav-text">路由器&amp;交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据的传输"><span class="nav-number">2.6.</span> <span class="nav-text">数据的传输</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OSI参考模型"><span class="nav-number">3.</span> <span class="nav-text">OSI参考模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#七层结构（由上到下）："><span class="nav-number">3.1.</span> <span class="nav-text">七层结构（由上到下）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排查故障"><span class="nav-number">3.2.</span> <span class="nav-text">排查故障</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络安全"><span class="nav-number">3.3.</span> <span class="nav-text">网络安全</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络的性能指标"><span class="nav-number">4.</span> <span class="nav-text">计算机网络的性能指标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OSI和DoD模型"><span class="nav-number">5.</span> <span class="nav-text">OSI和DoD模型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">54k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:31</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>

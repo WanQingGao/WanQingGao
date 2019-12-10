@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/wan-32.ico?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/wan-32.ico?v=7.4.2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/wan-16.ico?v=7.4.2">
+  <link rel="mask-icon" href="/images/wan-32.ico?v=7.4.2" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.2">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css?v=1.0.2">
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="网络安全计算机信息安全包括：数据存储安全、应用程序安全、操作系统安全、网络安全、物理安全、用户安全教育。">
+<meta name="keywords" content="计算机网络,网络安全,音频视频,无线网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络学习日记07——网络安全、音频视频、无线网络">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;03&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%81%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91%E3%80%81%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C&#x2F;index.html">
+<meta property="og:site_name" content="宛即的博客">
+<meta property="og:description" content="网络安全计算机信息安全包括：数据存储安全、应用程序安全、操作系统安全、网络安全、物理安全、用户安全教育。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;07PPT905.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;07PPT948.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;07PPT952.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;07PPT1117.png">
+<meta property="og:updated_time" content="2019-12-10T07:44:56.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;www.github.com&#x2F;WanQingGao&#x2F;BlogImages&#x2F;raw&#x2F;master&#x2F;%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C&#x2F;07PPT905.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%81%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91%E3%80%81%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>计算机网络学习日记07——网络安全、音频视频、无线网络 | 宛即的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">宛即的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B007%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%81%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91%E3%80%81%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="WanQingGao">
+      <meta itemprop="description" content="辣鸡烟酒僧/未来程序媛/摸鱼小砖家">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="宛即的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络学习日记07——网络安全、音频视频、无线网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-03 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-03T00:00:00+08:00">2019-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-10 15:44:56" itemprop="dateModified" datetime="2019-12-10T15:44:56+08:00">2019-12-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <a id="more"></a><h1 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h1><p>计算机信息安全包括：数据存储安全、应用程序安全、操作系统安全、网络安全、物理安全、用户安全教育。</p><a id="more"></a>
+
+
+<h2 id="四种威胁"><a href="#四种威胁" class="headerlink" title="四种威胁"></a>四种威胁</h2><p>计算机网络上的通信面临以下的四种威胁：<br>    (1) 截获——从网络上窃听他人的通信内容。<br>    (2) 中断——有意中断他人在网络上的通信。如DOS攻击、DDOS攻击，让其他计算机给该计算机不停发送数据，占用带宽直到瘫痪，这种方法无法用防火墙防住。<br>    (3) 篡改——故意篡改网络上传送的报文。<br>    (4) 伪造——伪造信息在网络上传送。<br>截获信息的攻击称为被动攻击，而更改信息和拒绝用户使用资源的攻击称为主动攻击。<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/07PPT905.png" alt="07PPT905"></p>
+<h2 id="恶意程序"><a href="#恶意程序" class="headerlink" title="恶意程序"></a>恶意程序</h2><p>(1) 计算机病毒——会“传染”其他程序的程序，“传染”是通过修改其他程序来把自身或其变种复制进去完成的。<br>(2) 计算机蠕虫——通过网络的通信功能将自身从一个结点发送到另一个结点并启动运行的程序。主要消耗计算机资源，如内存、CPU。<br>(3) 特洛伊木马——一种程序，它执行的功能超出所声称的功能。盗号木马、灰鸽子木马（远程控制计算机）。窃取信息、远程控制。相比于以上两种，木马需要和外界联系。查木马：方法一：在cmd中<code>netstat -n</code>查看会话有没有可疑的，方法二：打开系统配置-服务，查看有没有可疑的。<br>(4) 逻辑炸弹——一种当运行环境满足某种特定条件时执行其他特殊功能的程序。</p>
+<h2 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h2><p>（1）对称加密：发送和接受使用同种加解密方法。优点是效率高。缺点是密钥不适合在网上传，如果通信的目标多，要记录的密钥也会多，维护起来麻烦。<br>加密算法：<br><strong>数据加密标准 DES</strong>：数据加密标准 DES 属于常规密钥密码体制，是一种分组密码。在加密前，先对整个明文进行分组。每一个组长为 64 位。然后对每一个 64 位 二进制数据进行加密处理，产生一组 64 位密文数据。最后将各组密文串接起来，即得出整个的密文。使用的密钥为 64 位（实际密钥长度为 56 位，有 8 位用于奇偶校验)。过去计算机比较慢，64位即可。如今，破解64位密钥需要3.5或21分钟，而改成128位密钥，破解需要<code>!$5.4*10e28$</code>年。</p>
+<p>（2）非对称加密：发送和接受使用不同种加解密方法。密钥是密钥对，分为公钥和私钥。公钥加密私钥解密，或者公钥解密私钥加密。并且公钥私钥之间无法相互破解。优点是保密性更好，但是缺点是比较麻烦效率低。<br><strong>数字签名</strong>：应用层加密，用于文件不需要保密，但是不得有任何更改的情况。可以保证报文鉴别、报文完整、不可否认（防止抵赖）。A（发送端）将文件先通过单向散列计算，得到一个128位的“摘要”（又称为“指纹”），再将摘要用私钥加密，得到一个“签名”。A将文件、摘要和公钥发给B（接收端），B将文件通过单向散列计算，得到另一个摘要，并利用公钥解密A签名，比较解密后的摘要和计算的摘要。如果相同，这证明文件未被改动过。<br>为了防止抵赖，A的公钥和私钥必须要确定（不能随意改，否则可以抵赖），有一种证书颁发机构CA，A的公钥和私钥要获得CA的认证才可以使用。<br>（3）对称、非对称结合：用对称法加密文件，再用非对称法加密对称的密钥。这样既提高了效率，又提高了保密性。</p>
+<h2 id="安全协议"><a href="#安全协议" class="headerlink" title="安全协议"></a>安全协议</h2><h3 id="安全套接层-SSL"><a href="#安全套接层-SSL" class="headerlink" title="安全套接层 SSL"></a>安全套接层 SSL</h3><p>SSL 是安全套接层 (Secure Socket Layer)，可对万维网客户与服务器之间传送的数据进行加密和鉴别。（在应用层与传输层之间加解密）https中的s就是SSL。（一般涉及到登录的网站都是https）<br>http用的80端口，https用的443端口。IMAPS是993，POP3S是995，SMPS是465,。<br>SSL就是用对称、非对称结合的方法加密。因为刚开始需要用非对称解加密的对称密钥，所以https这样的网站会在开始时稍微慢一些。</p>
+<p>SSL 提供以下三个功能:<br>(1) SSL 服务器鉴别    允许用户证实服务器的身份。具有 SS L 功能的浏览器维持一个表，上面有一些可信赖的认证中心 CA (Certificate Authority)和它们的公钥。<br>(2) 加密的 SSL 会话    客户和服务器交互的所有数据都在发送方加密，在接收方解密。<br>(3) SSL 客户鉴别    允许服务器证实客户的身份。</p>
+<h3 id="网络层安全协议-IPsec"><a href="#网络层安全协议-IPsec" class="headerlink" title="网络层安全协议 IPsec"></a>网络层安全协议 IPsec</h3><p> 网络层保密是指所有在 IP 数据报中的数据都是加密的。用户“感觉不到”。<br><strong>鉴别首部 AH</strong> (Authentication Header)：AH鉴别源点和检查数据完整性，但不能保密。类似于签名。<br> <strong>封装安全有效载荷 ESP</strong>(Encapsulation Security Payload)：ESP 比 AH 复杂得多，它鉴别源点、检查数据完整性和提供保密。 类似于签名+加密。<br> <strong>安全关联SA</strong>：安全关联是一个单向连接（由服务器发起）。它由一个三元组唯一地确定，包括：<br>(1) 安全协议（使用 AH 或 ESP）的标识符<br>(2) 此单向连接的源 IP 地址<br>(3) 一个 32 位的连接标识符，称为安全参数索引 SPI (Security Parameter Index)<br>AH首部包含下一个首部、有效载荷长度、SPI、序号、保留、鉴别数据（摘要）<br><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/07PPT948.png" alt="07PPT948"><br>SP首部放SPI和序号，ESP尾部放下一个首部，ESP鉴别放鉴别结果（摘要）。<br> <img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/07PPT952.png" alt="07PPT952"></p>
+<h3 id="数据链路层安全"><a href="#数据链路层安全" class="headerlink" title="数据链路层安全"></a>数据链路层安全</h3><p> 路由器之间，点到点的加密。PPP协议支持身份验证，ADSL也需要账号密码登录，这些都是数据链路层安全。</p>
+<h3 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h3><p> 防火墙是由软件、硬件构成的系统，是一种特殊编程的路由器，用来在两个网络之间实施接入控制策略。接入控制策略是由使用防火墙的单位自行制订的，为的是可以最适合本单位的需要。防火墙内的网络称为“可信赖的网络”(trusted network)，而将外部的因特网称为“不可信赖的网络”(untrusted network)。防火墙可用来解决内联网和外联网的安全问题。</p>
+<p> 防火墙技术一般分为两类：<br> (1) 网络级防火墙——用来防止整个网络出现外来非法的入侵。属于这类的有分组过滤和授权服务器。前者检查所有流入本网络的信息，然后拒绝不符合事先制订好的一套准则的数据，而后者则是检查用户的登录是否合法。基于数据包源地址、目标地址、协议和端口，控制流量。<br>(2) 应用级防火墙——从应用程序来进行接入控制。通常使用应用网关或代理服务器来区分各种应用。例如，可以只允许通过访问万维网的应用，而阻止 FTP 应用的通过。基于数据包的源地址、目标地址、协议和端口、用户名、时间段、内容，控制流量、防止病毒、控制内容。</p>
+<p>防火墙结构：<br>三向外围网、背靠背防火墙、单一网卡防火墙、边缘防火墙。</p>
+<h1 id="因特网上的音频视频"><a href="#因特网上的音频视频" class="headerlink" title="因特网上的音频视频"></a>因特网上的音频视频</h1><h2 id="音频视频传输面临的问题"><a href="#音频视频传输面临的问题" class="headerlink" title="音频视频传输面临的问题"></a>音频视频传输面临的问题</h2><ol>
+<li>占用带宽高</li>
+<li>网络速度要稳定。使用播放缓存可以解决不稳定问题。</li>
+<li>延迟要低（尤其是对交互式传输）</li>
+</ol>
+<h2 id="目前因特网提供的音频-视频服务大体上可分为三种类型"><a href="#目前因特网提供的音频-视频服务大体上可分为三种类型" class="headerlink" title="目前因特网提供的音频/视频服务大体上可分为三种类型"></a>目前因特网提供的音频/视频服务大体上可分为三种类型</h2><ol>
+<li>流式(streaming)存储音频/视频 ——边下载边播放。“在线观看”。优点：节省存储空间、保护版权。</li>
+<li>流式实况音频/视频 ——边录制边发送 。“现场直播”。视频经编码器编码，传给流媒体。流媒体再分发多份给每一个观看客户。</li>
+<li>交互式音频/视频——实时交互式通信。“视频聊天”。经验证明，在电话交谈中，端到端的时延不应超过 250 ms，否则交谈者就能感到不自然。</li>
+</ol>
+<p>1、2可以通过安装流媒体服务实现。<br>3：IP电话：狭义的 IP 电话就是指在 IP 网络上打电话。所谓“IP 网络”就是“使用 IP 协议的分组交换网”的简称。广义的 IP 电话则不仅仅是电话通信，而且还可以是在IP网络上进行交互式多媒体实时通信（包括话音、视像等），甚至还包括即时传信IM (Instant Messaging)。IP 电话网关的几种连接方法：PPT993</p>
+<h2 id="QoS服务质量"><a href="#QoS服务质量" class="headerlink" title="QoS服务质量"></a>QoS服务质量</h2><p>提高网络QoS的方法有：</p>
+<ol>
+<li>标记：需要给不同性质的分组打上不同的标记，从而区分传输优先级。</li>
+<li>分类：应当使路由器增加分类(classification)机制，即路由器根据某些准则（例如，根据发送数据的地址）对输入分组进行分类，然后对不同类别的通信量给予不同的优先级。</li>
+<li>管制：例如，可将 H1 的数据率限定为 1 Mb/s。R1 不停地监视 H1 的数据率。只要其数据率超过规定的 1 Mb/s，R1 就将其中的某些分组丢弃。</li>
+<li>调度：利用调度功能给实时音频分配 1.0 Mb/s 的带宽，给文件传送分配 0.5 Mb/s 的带宽（相当于在带宽为 1.5 Mb/s 的链路中划分出两个逻辑链路），因而对这两种应用都有相应的服务质量保证。</li>
+<li>呼叫接纳：总数据率已超过了 1.5 Mb/s 链路的带宽。比较合理的做法是让一个数据流通过 1.5 Mb/s 的链路，而阻止另一个数据流的通过。这就需要呼叫接纳(call admission)机制。数据流要预先声明所需的服务质量，然后或者被准许进入网络，或者被拒绝进入网络。</li>
+</ol>
+<h1 id="无线网络"><a href="#无线网络" class="headerlink" title="无线网络"></a>无线网络</h1><p><img src="https://www.github.com/WanQingGao/BlogImages/raw/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/07PPT1117.png" alt="07PPT1117"><br>一个基本服务集 BSS 包括一个基站和若干个移动站，基本服务集内的基站叫做接入点 AP (Access Point)。<br>我们家用的路由器，实际上是包含了路由、交换机和AP。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" rel="tag"># 网络安全</a>
+              <a href="/tags/%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91/" rel="tag"># 音频视频</a>
+              <a href="/tags/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C/" rel="tag"># 无线网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B006%E2%80%94%E2%80%94%E5%BA%94%E7%94%A8%E5%B1%82/" rel="next" title="计算机网络学习日记06——应用层">
+                  <i class="fa fa-chevron-left"></i> 计算机网络学习日记06——应用层
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzMzOS8yMzgzOQ=="></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络安全"><span class="nav-number">1.</span> <span class="nav-text">网络安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四种威胁"><span class="nav-number">1.1.</span> <span class="nav-text">四种威胁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#恶意程序"><span class="nav-number">1.2.</span> <span class="nav-text">恶意程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加密"><span class="nav-number">1.3.</span> <span class="nav-text">加密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全协议"><span class="nav-number">1.4.</span> <span class="nav-text">安全协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安全套接层-SSL"><span class="nav-number">1.4.1.</span> <span class="nav-text">安全套接层 SSL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层安全协议-IPsec"><span class="nav-number">1.4.2.</span> <span class="nav-text">网络层安全协议 IPsec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据链路层安全"><span class="nav-number">1.4.3.</span> <span class="nav-text">数据链路层安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防火墙"><span class="nav-number">1.4.4.</span> <span class="nav-text">防火墙</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#因特网上的音频视频"><span class="nav-number">2.</span> <span class="nav-text">因特网上的音频视频</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#音频视频传输面临的问题"><span class="nav-number">2.1.</span> <span class="nav-text">音频视频传输面临的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目前因特网提供的音频-视频服务大体上可分为三种类型"><span class="nav-number">2.2.</span> <span class="nav-text">目前因特网提供的音频/视频服务大体上可分为三种类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QoS服务质量"><span class="nav-number">2.3.</span> <span class="nav-text">QoS服务质量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无线网络"><span class="nav-number">3.</span> <span class="nav-text">无线网络</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="WanQingGao"
+    src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">WanQingGao</p>
+  <div class="site-description" itemprop="description">辣鸡烟酒僧/未来程序媛/摸鱼小砖家</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WanQingGao" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;WanQingGao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/wanqing_gao" title="CSDN &amp;rarr; https:&#x2F;&#x2F;blog.csdn.net&#x2F;wanqing_gao" rel="noopener" target="_blank"><i class="fa fa-fw fa-contao"></i>CSDN</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WanQingGao</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">54k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:31</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.2"></script><script src="/js/motion.js?v=7.4.2"></script>
+<script src="/js/schemes/pisces.js?v=7.4.2"></script>
+<script src="/js/next-boot.js?v=7.4.2"></script>
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+
+</body>
+</html>
